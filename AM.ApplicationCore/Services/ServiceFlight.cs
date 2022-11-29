@@ -11,13 +11,13 @@ namespace AM.ApplicationCore.Services
 {
     public class ServiceFlight : Service<Flight>, IServiceFlight
     {
-        
-        public List<Flight> Flights => GetAll().ToList();  
+
+        public List<Flight> Flights => GetAll().ToList();
         //Delegates
         public Action<Plane> FlightDetailsDel;
         public Func<string, double> DurationAverageDel;
-        
-        public ServiceFlight(IUnitOfWork unitOfWork):base(unitOfWork)
+
+        public ServiceFlight(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
 
             // DurationAverageDel = DurationAverage;
@@ -117,7 +117,7 @@ namespace AM.ApplicationCore.Services
             return (from f in Flights
                     where f.Destination.Equals(destination)
                     select f.EstimatedDuration).Average();
-           // return Flights.Where(f=>f.Destination.Equals(destination)).Select(f=> f.EstimatedDuration).Average();
+            // return Flights.Where(f=>f.Destination.Equals(destination)).Select(f=> f.EstimatedDuration).Average();
         }
 
         public IEnumerable<Flight> OrderedDurationFlights()
@@ -150,15 +150,16 @@ namespace AM.ApplicationCore.Services
             var req = from f in Flights
                       group f by f.Destination;
 
-          //  var reqLambda = Flights.GroupBy(f => f.Destination);
+            //  var reqLambda = Flights.GroupBy(f => f.Destination);
 
             foreach (var g in req)
             { Console.WriteLine("Destination: " + g.Key);
                 foreach (var f in g)
-                Console.WriteLine("Décollage: " +f.FlightDate);
+                    Console.WriteLine("Décollage: " + f.FlightDate);
             }
             return req;
         }
+
 
 
         /*  public void GetFlightsByDate(string DateDepart)       
@@ -174,12 +175,10 @@ namespace AM.ApplicationCore.Services
           }*/
         public IEnumerable<Flight> GetFlightsByDate(string DateDepart)
         {
-            return GetMany(f => f.FlightDate.Date.Equals (DateDepart));
+            return GetMany(f => f.FlightDate.Date.Equals(DateDepart));
 
-            
+
         }
 
-
-
-    }
+    } 
 }

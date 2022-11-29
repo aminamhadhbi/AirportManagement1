@@ -9,7 +9,9 @@ namespace AM.ApplicationCore.Interfaces
 {
    public interface IServiceFlight: IService<Flight>
     {
+
         public IEnumerable<Flight> GetFlightsByDate(string DateDepart) ;
+
         List<DateTime> GetFlightDates(string destination);
         void GetFlights(string filterType, string filterValue);
         void ShowFlightDetails(Plane plane);

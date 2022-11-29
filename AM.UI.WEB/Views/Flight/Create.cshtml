@@ -4,11 +4,19 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+<<<<<<< HEAD
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Airline" class="control-label"></label>
                 <input type="file" asp-for="Airline" class="form-control" />
+=======
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Airline" class="control-label"></label>
+                <input asp-for="Airline" class="form-control" />
+>>>>>>> fb41f63285c6b31b83c47b56743c1a3c27fdc041
                 <span asp-validation-for="Airline" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO; 
 
 
+
 namespace AM.UI.WEB.Controllers
 {
     public class FlightController : Controller
@@ -13,6 +14,7 @@ namespace AM.UI.WEB.Controllers
 
     {
         private readonly IServiceFlight flightservice;
+
         private readonly IServicePlane servicePlane;
 
         public FlightController(IServiceFlight service, IServicePlane service1)
@@ -21,15 +23,22 @@ namespace AM.UI.WEB.Controllers
             servicePlane = service1;
         }
 
+        public FlightController(IServiceFlight service)
+        {
+            flightservice = service;
+
+        }
+
 
         // GET: FlightController
+
         public ActionResult Index(DateTime? dateDepart)
         {
-           
-       
-            if (dateDepart == null) 
+
+
+            if (dateDepart == null)
             {
-              
+
                 return View(flightservice.GetAll().ToList());
             }
             else
@@ -38,8 +47,13 @@ namespace AM.UI.WEB.Controllers
 
                 return View(flightservice.GetFlightsByDate((dateDepart1).ToString()).ToList());
             }
-       
 
+        }
+
+
+        public ActionResult Index()
+        {
+            return View(flightservice.GetAll().ToList());
 
         }
 
@@ -58,28 +72,41 @@ namespace AM.UI.WEB.Controllers
         // GET: FlightController/Create
         public ActionResult Create()
         {
+
             var Plane = servicePlane.GetAll();
             ViewBag.PlaneId = new SelectList(Plane, "PlaneId", "PlaneId");
+
             return View();
         }
 
         // POST: FlightController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Flight flight,IFormFile AirlineImage)
+
+        public ActionResult Create(Flight flight, IFormFile AirlineImage)
+        {
+          
+      
+
+                if (AirlineImage != null)
+                {
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", AirlineImage.FileName);
+
+                    Stream stream = new FileStream(path, FileMode.Create);
+                    AirlineImage.CopyTo(stream);
+                    flight.Airline = AirlineImage.FileName;
+
+             
+                        }
+
+
+
+        }
+
+        public ActionResult Create(Flight flight)
         {
             try
             {
-
-                if(AirlineImage != null)
-                    {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", AirlineImage.FileName);                
-                
-              Stream stream = new FileStream(path,FileMode.Create);
-                     AirlineImage.CopyTo(stream);
-                    flight.Airline = AirlineImage.FileName;
-
-                }
                 flightservice.Add(flight);
 
                 flightservice.Commit();
@@ -105,10 +132,15 @@ namespace AM.UI.WEB.Controllers
             {
                 return NotFound();
             }
+
             var Plane = servicePlane.GetAll();
             ViewBag.PlaneId = new SelectList(Plane, "PlaneId", "PlaneId");
     
             return View(flight);
+
+            // ViewBag.flightservice = new SelectList(Enum.GetNames(typeof(FlightType)));
+            return View();
+
         }
 
         // POST: FlightController/Edit/5
